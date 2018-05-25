@@ -9,9 +9,12 @@ namespace Endpoint2
     {
         public class CommandSender : IWantToRunWhenEndpointStartsAndStops
         {
-            public  Task Start(IMessageSession session)
+            public async Task Start(IMessageSession session)
             {
-                return Task.Run(() => Loop(session));
+                // Not return task, forking a new thread!
+#pragma warning disable 4014
+                Task.Run(() => Loop(session));
+#pragma warning restore 4014
             }
 
             async void Loop(IMessageSession session)

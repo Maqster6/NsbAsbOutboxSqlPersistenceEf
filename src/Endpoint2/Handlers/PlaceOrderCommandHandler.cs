@@ -19,7 +19,7 @@ namespace Endpoint2
         {
             log.Info($"Endpoint2 Received PlaceOrderCommand: {placeOrderCommand.OrderNumber}");
 
-            var dataContext = orderStorageContext.GetOrderDbContext(context.SynchronizedStorageSession);
+            var dataContext = orderStorageContext.GetOrderDbContext(context);
 
             var order = Domain.Order.Create(placeOrderCommand.OrderId, placeOrderCommand.OrderNumber);
             order.PlaceOrder(placeOrderCommand.PlacedAtDate);

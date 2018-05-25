@@ -1,10 +1,10 @@
 ﻿using Domain;
-using NServiceBus.Persistence;
+using NServiceBus;
 
 namespace Endpoint2
 {
     public interface IOrderStorageContext
     {
-        OrderDbContext GetOrderDbContext(SynchronizedStorageSession session);
+        OrderDbContext GetOrderDbContext(IMessageHandlerContext session);
     }
 }

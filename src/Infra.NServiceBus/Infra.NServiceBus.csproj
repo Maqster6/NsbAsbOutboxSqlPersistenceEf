@@ -137,7 +137,6 @@
   <ItemGroup>
     <Compile Include="Common\AuditErrorConfiguration.cs" />
     <Compile Include="Common\SerializationConfiguration.cs" />
-    <Compile Include="Persistence\SynchronizedStorageExtensions.cs" />
     <Compile Include="SanitizationStrategy.cs" />
     <Compile Include="Persistence\DataContextPersistence.cs" />
     <Compile Include="Recovery\RecoveryConfiguration.cs" />

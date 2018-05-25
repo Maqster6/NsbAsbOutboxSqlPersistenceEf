@@ -1,17 +1,18 @@
-﻿using Domain;
+﻿using System;
+using Domain;
 using NServiceBus;
-using NServiceBus.Persistence;
 
 namespace Endpoint2
 {
-    public class OrderStorageContext : IOrderStorageContext
+    /// <summary>
+    /// This only exist to warp the extension method as these cannot easily to mocked for unit testing.
+    /// </summary>
+    class OrderStorageContext : IOrderStorageContext
     {
-        public OrderDbContext GetOrderDbContext(SynchronizedStorageSession session)
+        public OrderDbContext GetOrderDbContext(IMessageHandlerContext context)
         {
-            var sqlPersistenceSession = session.SqlPersistenceSession();
-            var context = new OrderDbContext(sqlPersistenceSession.Connection);
-            context.Database.UseTransaction(sqlPersistenceSession.Transaction);
-            return context;
+            if (!context.Extensions.TryGet(out OrderDbContext dataContext)) throw new Exception($"No dbcontext set for '{typeof(OrderDbContext)}.");
+            return dataContext;
         }
     }
 }
