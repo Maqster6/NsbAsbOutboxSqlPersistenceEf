@@ -12,12 +12,12 @@ namespace Infra.NServiceBus.Recovery
             recoverability.Immediate(
                 customizations: immediate =>
                 {
-                    immediate.NumberOfRetries(3);
+                    immediate.NumberOfRetries(0);
                 });
             recoverability.Delayed(
                 customizations: delayed =>
                 {
-                    var numberOfRetries = delayed.NumberOfRetries(5);
+                    var numberOfRetries = delayed.NumberOfRetries(0);
                     numberOfRetries.TimeIncrease(TimeSpan.FromSeconds(30));
                 });
         }

@@ -1,4 +1,6 @@
-﻿using NServiceBus;
+﻿using Domain;
+using Infra.NServiceBus;
+using NServiceBus;
 
 namespace Endpoint1
 {
@@ -12,7 +14,7 @@ namespace Endpoint1
             {
                 c.ConfigureComponent<OrderStorageContext>(DependencyLifecycle.InstancePerUnitOfWork);
             });                 
-            //endpointConfiguration.EnablePersistAndPublish<OrderDbContext>();
+            endpointConfiguration.EnablePersistAndPublish<OrderDbContext>();
         }
     }
 }

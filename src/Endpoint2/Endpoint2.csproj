@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0F372666-A717-4CB9-B459-4509CEC47C55}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Endpoint2</RootNamespace>
     <AssemblyName>Endpoint2</AssemblyName>
@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -108,8 +109,11 @@
     <Compile Include="Bootstrap\Bootstrapper.cs" />
     <Compile Include="CommandSender.cs" />
     <Compile Include="Commands\PlaceOrderCommand.cs" />
-    <Compile Include="PlaceOrderCommandHandler.cs" />
+    <Compile Include="OrderStorage\IOrderStorageContext.cs" />
+    <Compile Include="OrderStorage\OrderStorageContext.cs" />
+    <Compile Include="Handlers\PlaceOrderCommandHandler.cs" />
     <Compile Include="EndpointConfiguration.cs" />
+    <Compile Include="OrderStorage\SynchronizedStorageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

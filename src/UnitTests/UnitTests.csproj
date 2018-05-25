@@ -81,9 +81,9 @@
       <Project>{11B8C825-077F-4726-A55C-842277850A32}</Project>
       <Name>Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Endpoint1\Endpoint1.csproj">
-      <Project>{2EEF86C6-ABBB-4954-A773-3092675D0220}</Project>
-      <Name>Endpoint1</Name>
+    <ProjectReference Include="..\Endpoint2\Endpoint2.csproj">
+      <Project>{0f372666-a717-4cb9-b459-4509cec47c55}</Project>
+      <Name>Endpoint2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

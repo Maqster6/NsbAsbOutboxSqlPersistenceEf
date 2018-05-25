@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using NServiceBus.Pipeline;
 
@@ -9,11 +7,10 @@ namespace Infra.NServiceBus.Persistence
 {
     public class PersistAndPublishBehavior<TDbContext> : Behavior<IInvokeHandlerContext> where TDbContext : DbContext
     {
-        private TDbContext dataContext;
-       
+      
         public override async Task Invoke(IInvokeHandlerContext context, Func<Task> next)
         {
-            dataContext = context.SynchronizedStorageSession.FromCurrentSession<TDbContext>();
+            var dataContext = context.SynchronizedStorageSession.FromCurrentSession<TDbContext>();
             using (dataContext)
             {
                 context.Extensions.Set("DbContext", dataContext);

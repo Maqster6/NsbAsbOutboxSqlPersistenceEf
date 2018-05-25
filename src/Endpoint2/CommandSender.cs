@@ -9,24 +9,37 @@ namespace Endpoint2
     {
         public class CommandSender : IWantToRunWhenEndpointStartsAndStops
         {
-            public Task Start(IMessageSession session)
+            public  Task Start(IMessageSession session)
+            {
+                return Task.Run(() => Loop(session));
+            }
+
+            async void Loop(IMessageSession session)
             {
                 Console.WriteLine("Press enter to send Place Order Command");
 
-                var key = Console.ReadKey();
-
-                if (key.Key == ConsoleKey.Enter)
+                while (true)
                 {
-                    for (int i = 0; i < 10; i++)
+                    var key = Console.ReadKey();
+
+                    if (key.Key == ConsoleKey.Enter)
                     {
-                        var orderNumber = i + 1;
-                        session.Send("Endpoint2", new PlaceOrderCommand() { OrderId = Guid.NewGuid(), OrderNumber = orderNumber, PlacedAtDate = DateTime.UtcNow });
-                        Console.WriteLine($"Place Order Command sent {orderNumber}");
+                        for (int i = 0; i < 10; i++)
+                        {
+                            var orderNumber = i + 1;
+                            await session.Send("Endpoint2",
+                                new PlaceOrderCommand
+                                {
+                                    OrderId = Guid.NewGuid(),
+                                    OrderNumber = orderNumber,
+                                    PlacedAtDate = DateTime.UtcNow
+                                })
+                                .ConfigureAwait(false);
+                            Console.WriteLine($"Place Order Command sent {orderNumber}");
+                        }
+
                     }
-
                 }
-
-                return Task.CompletedTask;
             }
 
             public Task Stop(IMessageSession session)

@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using Domain;
-using Endpoint1;
-using Endpoint1.Commands;
+using Endpoint2;
+using Endpoint2.Commands;
 using EntityFramework.FakeItEasy;
-using FakeItEasy;
-using FakeItEasy.ExtensionSyntax;
 using Moq;
-using NServiceBus;
-using NServiceBus.Extensibility;
-using NServiceBus.Persistence;
 using NServiceBus.Testing;
 using NUnit.Framework;
-using ObjectExtensions = FakeItEasy.ExtensionSyntax.Full.ObjectExtensions;
 using Order = Domain.Order;
 
 namespace UnitTests
@@ -48,7 +38,6 @@ namespace UnitTests
             };
 
             var context = new TestableMessageHandlerContext();
-            handler = new PlaceOrderCommandHandler(new OrderStorageContext());
 
             //TODO: Question? How do you test this, since I cannot inject the OrderDbContext into the handler
             //In the handler there is the context.SynchronizedStorageSession.FromCurrentSession() that returns a new OrderDbContext
@@ -58,12 +47,18 @@ namespace UnitTests
             //Then I realized that U guys have your own TestingFramework that I installed so that I could get a TestableMessageHandlerContext
             //but cannot find a way to set the session.SqlPersistenceSession();
 
-            var mock = new Mock<IOrderStorageContext>();
-            mock.SetupIgnoreArgs(x => x.GetOrderDbContext(null)).Returns(dbContext);
-           
+            var orderStorageContextMock = new Mock<IOrderStorageContext>();
+            orderStorageContextMock.SetupIgnoreArgs(x => x.GetOrderDbContext(null)).Returns(dbContext);
+        
+
+            handler = new PlaceOrderCommandHandler(orderStorageContextMock.Object);
+
             try
             {
-                await handler.Handle(placeOrderCommand, context).ConfigureAwait(false);
+                await handler.Handle(placeOrderCommand, context)
+                    .ConfigureAwait(false);
+                await dbContext.SaveChangesAsync()
+                    .ConfigureAwait(false);
             }
             catch (Exception e)
             {

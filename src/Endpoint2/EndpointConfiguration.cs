@@ -1,17 +1,24 @@
-﻿using Domain;
+﻿using System;
+using System.Threading.Tasks;
+using Domain;
 using Infra.NServiceBus;
 using NServiceBus;
 
-namespace Endpoint2
+
+class Program
 {
-    public partial class EndpointConfig : IConfigureThisEndpoint, AsA_Worker
+    public static async Task Main()
     {
-        public void Customize(EndpointConfiguration endpointConfiguration)
-        {
-            endpointConfiguration.DefineEndpointName("Endpoint2");
-            endpointConfiguration.EnableOutbox();
-            endpointConfiguration.EnablePersistAndPublish<OrderDbContext>();
-        }
+        var endpointConfiguration = new EndpointConfiguration("Endpoint2");
+        endpointConfiguration.DefineEndpointName("Endpoint2");
+        endpointConfiguration.EnableOutbox();
+        endpointConfiguration.EnablePersistAndPublish<OrderDbContext>();
+        var instance = await Endpoint.Start(endpointConfiguration)
+            .ConfigureAwait(false);
+        await Task.Delay(-1)
+            .ConfigureAwait(false);
+        // Unreachable
+        await instance.Stop()
+            .ConfigureAwait(false);
     }
 }
-

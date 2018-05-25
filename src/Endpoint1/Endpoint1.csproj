@@ -108,12 +108,12 @@
     <Compile Include="Bootstrap\Bootstrapper.cs" />
     <Compile Include="CommandSender.cs" />
     <Compile Include="Commands\PlaceOrderCommand.cs" />
-    <Compile Include="IOrderStorageContext.cs" />
-    <Compile Include="OrderStorageContext.cs" />
-    <Compile Include="PlaceOrderCommandHandler.cs" />
+    <Compile Include="OrderStorage\IOrderStorageContext.cs" />
+    <Compile Include="OrderStorage\OrderStorageContext.cs" />
+    <Compile Include="Handlers\PlaceOrderCommandHandler.cs" />
     <Compile Include="EndpointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SynchronizedStorageExtensions.cs" />
+    <Compile Include="OrderStorage\SynchronizedStorageExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

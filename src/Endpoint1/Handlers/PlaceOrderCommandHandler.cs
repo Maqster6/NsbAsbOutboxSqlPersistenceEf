@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Domain;
 using Endpoint1.Commands;
 using Infra.NServiceBus.Persistence;
 using NServiceBus;
@@ -16,16 +15,19 @@ namespace Endpoint1
         {
             this.orderStorageContext = orderStorageContext;
         }
+
         public async Task Handle(PlaceOrderCommand placeOrderCommand, IMessageHandlerContext context)
         {
             log.Info($"Endpoint1 Received PlaceOrderCommand: {placeOrderCommand.OrderNumber}");
+
 
             using (var dataContext = orderStorageContext.GetOrderDbContext(context.SynchronizedStorageSession))
             {
                 var order = Domain.Order.Create(placeOrderCommand.OrderId, placeOrderCommand.OrderNumber);
                 order.PlaceOrder(placeOrderCommand.PlacedAtDate);
                 dataContext.Orders.Add(order);
-                await DataContextPersistence.SaveChangesAsync(dataContext);
+                await DataContextPersistence.SaveChangesAsync(dataContext)
+                    .ConfigureAwait(false);
             }
         }
     }

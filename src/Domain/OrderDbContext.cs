@@ -20,7 +20,7 @@ namespace Domain
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("OrderContext");
+            //modelBuilder.HasDefaultSchema("OrderContext");
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
             base.OnModelCreating(modelBuilder);

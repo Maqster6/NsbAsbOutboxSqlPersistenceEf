@@ -6,7 +6,7 @@ namespace Endpoint1
 {
     public static class SynchronizedStorageExtensions
     {
-        public static OrderDbContext FromCurrentSession(this SynchronizedStorageSession session)      
+        public static OrderDbContext FromCurrentSession(SynchronizedStorageSession session)      
         {
             var sqlPersistenceSession = session.SqlPersistenceSession();
             var context = new OrderDbContext(sqlPersistenceSession.Connection);
