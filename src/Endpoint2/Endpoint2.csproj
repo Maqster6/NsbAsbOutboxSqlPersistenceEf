@@ -113,7 +113,6 @@
     <Compile Include="OrderStorage\OrderStorageContext.cs" />
     <Compile Include="Handlers\PlaceOrderCommandHandler.cs" />
     <Compile Include="EndpointConfiguration.cs" />
-    <Compile Include="OrderStorage\SynchronizedStorageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

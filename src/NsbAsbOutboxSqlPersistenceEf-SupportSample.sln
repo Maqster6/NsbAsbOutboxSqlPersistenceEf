@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Endpoint1", "Endpoint1\Endpoint1.csproj", "{2EEF86C6-ABBB-4954-A773-3092675D0220}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{11B8C825-077F-4726-A55C-842277850A32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.NServiceBus", "Infra.NServiceBus\Infra.NServiceBus.csproj", "{1C31F37C-053B-478A-A0FA-AECC0408D4FD}"
@@ -27,16 +25,6 @@ Global
 		test4-ea|Any CPU = test4-ea|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.dit-ea|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.dit-ea|Any CPU.Build.0 = Debug|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.Mat|Any CPU.ActiveCfg = Release|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.Mat|Any CPU.Build.0 = Release|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.test4-ea|Any CPU.ActiveCfg = Release|Any CPU
-		{2EEF86C6-ABBB-4954-A773-3092675D0220}.test4-ea|Any CPU.Build.0 = Release|Any CPU
 		{11B8C825-077F-4726-A55C-842277850A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11B8C825-077F-4726-A55C-842277850A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11B8C825-077F-4726-A55C-842277850A32}.dit-ea|Any CPU.ActiveCfg = dit-ea|Any CPU
