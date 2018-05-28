@@ -137,8 +137,9 @@
   <ItemGroup>
     <Compile Include="Common\AuditErrorConfiguration.cs" />
     <Compile Include="Common\SerializationConfiguration.cs" />
+    <Compile Include="Persistence\DbContextWrapper.cs" />
+    <Compile Include="Persistence\IDbContextWrapper.cs" />
     <Compile Include="SanitizationStrategy.cs" />
-    <Compile Include="Persistence\DataContextPersistence.cs" />
     <Compile Include="Recovery\RecoveryConfiguration.cs" />
     <Compile Include="Conventions\ConventionsRegistration.cs" />
     <Compile Include="Conventions\MessageConventions.cs" />

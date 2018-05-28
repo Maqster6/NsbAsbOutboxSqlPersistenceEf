@@ -109,8 +109,6 @@
     <Compile Include="Bootstrap\Bootstrapper.cs" />
     <Compile Include="CommandSender.cs" />
     <Compile Include="Commands\PlaceOrderCommand.cs" />
-    <Compile Include="OrderStorage\IOrderStorageContext.cs" />
-    <Compile Include="OrderStorage\OrderStorageContext.cs" />
     <Compile Include="Handlers\PlaceOrderCommandHandler.cs" />
     <Compile Include="EndpointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

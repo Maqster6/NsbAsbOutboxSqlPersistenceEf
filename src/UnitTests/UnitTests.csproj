@@ -85,6 +85,10 @@
       <Project>{0f372666-a717-4cb9-b459-4509cec47c55}</Project>
       <Name>Endpoint2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infra.NServiceBus\Infra.NServiceBus.csproj">
+      <Project>{1C31F37C-053B-478A-A0FA-AECC0408D4FD}</Project>
+      <Name>Infra.NServiceBus</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

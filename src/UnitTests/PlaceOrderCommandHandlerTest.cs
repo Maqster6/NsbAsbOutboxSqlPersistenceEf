@@ -5,6 +5,7 @@ using Domain;
 using Endpoint2;
 using Endpoint2.Commands;
 using EntityFramework.FakeItEasy;
+using Infra.NServiceBus.Persistence;
 using Moq;
 using NServiceBus.Testing;
 using NUnit.Framework;
@@ -47,8 +48,8 @@ namespace UnitTests
             //Then I realized that U guys have your own TestingFramework that I installed so that I could get a TestableMessageHandlerContext
             //but cannot find a way to set the session.SqlPersistenceSession();
 
-            var orderStorageContextMock = new Mock<IOrderStorageContext>();
-            orderStorageContextMock.SetupIgnoreArgs(x => x.GetOrderDbContext(null)).Returns(dbContext);
+            var orderStorageContextMock = new Mock<IDbContextWrapper<OrderDbContext>>();
+            orderStorageContextMock.SetupIgnoreArgs(x => x.GetDbContext(null)).Returns(dbContext);
         
 
             handler = new PlaceOrderCommandHandler(orderStorageContextMock.Object);

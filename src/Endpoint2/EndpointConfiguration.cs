@@ -14,7 +14,7 @@ class Program
         endpointConfiguration.DefineEndpointName("Endpoint2");
         endpointConfiguration.EnableOutbox();
         endpointConfiguration.EnablePersistAndPublish<OrderDbContext>();
-        endpointConfiguration.RegisterComponents(c=>c.ConfigureComponent<OrderStorageContext>(DependencyLifecycle.SingleInstance));
+        
         var instance = await Endpoint.Start(endpointConfiguration)
             .ConfigureAwait(false);
         await Task.Delay(-1)

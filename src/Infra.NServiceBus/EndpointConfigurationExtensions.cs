@@ -8,7 +8,7 @@ namespace Infra.NServiceBus
     {
         public static void EnablePersistAndPublish<TDbContext>(this EndpointConfiguration configuration)
            where TDbContext : DbContext
-        {            
+        {
             var pipeline = configuration.Pipeline;
             pipeline.Register(
                 behavior: new PersistAndPublishBehavior<TDbContext>(),
@@ -17,7 +17,8 @@ namespace Infra.NServiceBus
             configuration.RegisterComponents(
                 components =>
                 {
-                    components.ConfigureComponent<PersistAndPublishBehavior<TDbContext>>(DependencyLifecycle.InstancePerUnitOfWork);                  
+                    components.ConfigureComponent<PersistAndPublishBehavior<TDbContext>>(DependencyLifecycle.InstancePerUnitOfWork);
+                    components.ConfigureComponent<DbContextWrapper<TDbContext>>(DependencyLifecycle.SingleInstance);
                 });
         }
     }
