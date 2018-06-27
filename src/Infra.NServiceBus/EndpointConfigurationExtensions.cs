@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using Infra.NServiceBus.Inbox;
 using Infra.NServiceBus.Persistence;
 using NServiceBus;
 
@@ -19,6 +20,21 @@ namespace Infra.NServiceBus
                 {
                     components.ConfigureComponent<PersistAndPublishBehavior<TDbContext>>(DependencyLifecycle.InstancePerUnitOfWork);
                     components.ConfigureComponent<DbContextWrapper<TDbContext>>(DependencyLifecycle.SingleInstance);
+                });
+        }
+
+        public static void EnableInbox(this EndpointConfiguration configuration)
+        {
+            var pipeline = configuration.Pipeline;
+            pipeline.Register(
+                behavior: new InboxBehavior<InboxDbContext>(),
+                description: "Idempotency");
+
+            configuration.RegisterComponents(
+                components =>
+                {
+                    components.ConfigureComponent<InboxBehavior<InboxDbContext>>(DependencyLifecycle.InstancePerUnitOfWork);
+                    components.ConfigureComponent<DbContextWrapper<InboxDbContext>>(DependencyLifecycle.SingleInstance);
                 });
         }
     }

@@ -29,15 +29,27 @@ namespace Endpoint2
                     {
                         for (int i = 0; i < 10; i++)
                         {
+
                             var orderNumber = i + 1;
-                            await session.Send("Endpoint2",
-                                new PlaceOrderCommand
-                                {
-                                    OrderId = Guid.NewGuid(),
-                                    OrderNumber = orderNumber,
-                                    PlacedAtDate = DateTime.UtcNow
-                                })
-                                .ConfigureAwait(false);
+
+                            Guid orderId = Guid.NewGuid();
+                            string contentVersion = DateTime.UtcNow.Ticks.ToString();
+                            var placeOrderCommand = new PlaceOrderCommand
+                            {
+                                OrderId = orderId,
+                                OrderNumber = orderNumber,
+                                PlacedAtDate = DateTime.UtcNow
+                            };
+
+                            var sendOptions = new SendOptions();
+                            string contentId = orderId.ToString();
+                            sendOptions.SetHeader("ContentId", contentId);
+                            sendOptions.SetHeader("ContentVersion", contentVersion);
+                            sendOptions.SetDestination("Endpoint2");
+
+                            await session.Send(placeOrderCommand, sendOptions)
+                                         .ConfigureAwait(false);
+
                             Console.WriteLine($"Place Order Command sent {orderNumber}");
                         }
 
