@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using Microsoft.Azure;
 using NServiceBus;
@@ -16,12 +17,16 @@ namespace Infra.NServiceBus.Persistence
             {
                 throw new Exception("Database connectionstring is not set");
             }
+            var dbSchema = ConfigurationManager.AppSettings["DatabaseSchemaName"];
+            var endpointTablePrefix = ConfigurationManager.AppSettings["EndpointTablePrefix"];
+
             configuration.EnableInstallers();
             var persistence = configuration.UsePersistence<SqlPersistence>();
             persistence.SubscriptionSettings().DisableCache();
-            persistence.TablePrefix("Endpoint_");
+            persistence.TablePrefix(endpointTablePrefix);
             var dialect = persistence.SqlDialect<SqlDialect.MsSqlServer>();
-            dialect.Schema("OrderContext");
+       
+            dialect.Schema(dbSchema);
             persistence.ConnectionBuilder(
                 connectionBuilder: () => new SqlConnection(connectionString));
         }

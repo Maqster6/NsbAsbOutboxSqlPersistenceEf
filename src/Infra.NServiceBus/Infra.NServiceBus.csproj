@@ -138,13 +138,10 @@
     <Compile Include="Common\AuditErrorConfiguration.cs" />
     <Compile Include="Common\SerializationConfiguration.cs" />
     <Compile Include="Inbox\ICheckMessageOrder.cs" />
-    <Compile Include="Inbox\IInboxRepository.cs" />
-    <Compile Include="Inbox\InboxRepository.cs" />
     <Compile Include="Inbox\InboxDbContextConfiguration.cs" />
-    <Compile Include="Inbox\IInboxSettings.cs" />
     <Compile Include="Inbox\InboxBehavior.cs" />
     <Compile Include="Inbox\InboxDbContext.cs" />
-    <Compile Include="Inbox\InboxMessage.cs" />
+    <Compile Include="Inbox\InboxRecord.cs" />
     <Compile Include="Inbox\Startup\InboxStartupDbContext.cs" />
     <Compile Include="Persistence\DbContextWrapper.cs" />
     <Compile Include="Persistence\IDbContextWrapper.cs" />

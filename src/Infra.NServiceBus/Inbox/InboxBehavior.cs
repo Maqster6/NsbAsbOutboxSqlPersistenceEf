@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
+using NServiceBus.Logging;
 using NServiceBus.Pipeline;
 
 namespace Infra.NServiceBus.Inbox
 {
     public class InboxBehavior<TDbContext> : Behavior<IInvokeHandlerContext> where TDbContext : InboxDbContext
     {
+        static ILog log = LogManager.GetLogger<InboxBehavior<TDbContext>>();
         public override async Task Invoke(IInvokeHandlerContext context, Func<Task> next)
         {
             var session = context.SynchronizedStorageSession;
@@ -22,15 +24,13 @@ namespace Infra.NServiceBus.Inbox
                 context.MessageHeaders.TryGetValue("ContentId", out string contentId);
                 long contentVersion = GetContentVersionFrom(context.MessageHeaders);
 
-                
-                
                 var checkMessageOrderType = GetCheckMessageOrderType(context);
 
                 var latestHandledVersion = await dbContext.GetLatestMessageVersion(contentId, checkMessageOrderType).ConfigureAwait(false);
 
                 var shouldBeHandled = latestHandledVersion == null || contentVersion > latestHandledVersion;
 
-                var inboxMessage = new InboxMessage
+                var inboxMessage = new InboxRecord
                 {
                     ContentId = contentId,
                     ContentVersion = contentVersion,
@@ -41,12 +41,16 @@ namespace Infra.NServiceBus.Inbox
 
                 if (shouldBeHandled)
                 {
+                    log.Info($"Handling message: Type: {checkMessageOrderType}, ContentId: {contentId}, ContentVersion: {contentVersion}");
                     await dbContext.PersistHandledMessage(inboxMessage).ConfigureAwait(false);
                     await next().ConfigureAwait(false);
                 }
                 else
                 {
+                    string discardedReason = $"Discarding message since a newer version has already been processed: Type: {checkMessageOrderType}, ContentId: {contentId}, ContentVersion: {contentVersion}";
+                    log.Info(discardedReason);
                     await dbContext.PersistDiscardedMessage(inboxMessage, latestHandledVersion.GetValueOrDefault()).ConfigureAwait(false);
+                    context.Headers.Add("InboxDiscardedReason", discardedReason);
                 }
             }
         }

@@ -74,18 +74,17 @@ namespace Infra.NServiceBus.Inbox.Startup
 
         public void RemoveEntriesOlderThan(DateTime dateTime)
         {
-            var sql = $"DELETE FROM [{Settings.SchemaName}].[InboxRecord] WHERE ModifiedAtUtc < @dateTime";
+            var sql = $"DELETE FROM [{dbSchemaName}].[{dbTablePrefix}InboxRecord] WHERE ModifiedAtUtc < @dateTime";
             Database.ExecuteSqlCommand(sql, new SqlParameter("@dateTime", dateTime));
         }
 
         public void InitializeDatabase()
         {
-            var schemaName = Settings.SchemaName;
-            Database.ExecuteSqlCommand(string.Format(createSchemaSql, schemaName));
-            Database.ExecuteSqlCommand(string.Format(createInboxRecordSql, schemaName));
-            Database.ExecuteSqlCommand(string.Format(createInboxRecordIndexSql, schemaName));
-            Database.ExecuteSqlCommand(string.Format(createInboxRecordIndexModifiedAtUtcSql, schemaName));
-            Database.ExecuteSqlCommand(string.Format(createInboxDiscardedRecordSql, schemaName));
+            Database.ExecuteSqlCommand(string.Format(createSchemaSql, dbSchemaName));
+            Database.ExecuteSqlCommand(string.Format(createInboxRecordSql, dbSchemaName));
+            Database.ExecuteSqlCommand(string.Format(createInboxRecordIndexSql, dbSchemaName));
+            Database.ExecuteSqlCommand(string.Format(createInboxRecordIndexModifiedAtUtcSql, dbSchemaName));
+            Database.ExecuteSqlCommand(string.Format(createInboxDiscardedRecordSql, dbSchemaName));
         }
 
         private static void TurnOffAutomaticDatabaseCreationAndSchemaUpdates()

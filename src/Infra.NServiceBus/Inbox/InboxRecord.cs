@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infra.NServiceBus.Inbox
 {
-    [Table("InboxRecord")]
-    public class InboxMessage
+    public class InboxRecord
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

@@ -11,12 +11,14 @@ namespace Infra.NServiceBus.Inbox
 {
     public class InboxDbContext : DbContext
     {
-        private string dbSchemaName;
+        protected string dbSchemaName;
+        protected string dbTablePrefix;
 
         public InboxDbContext()
         {
             TurnOffAutomaticDatabaseCreationAndSchemaUpdates();
             dbSchemaName = ConfigurationManager.AppSettings["DatabaseSchemaName"];
+            dbTablePrefix = ConfigurationManager.AppSettings["EndpointTablePrefix"];
         }
 
         public InboxDbContext(IDbConnection connection)
@@ -24,12 +26,11 @@ namespace Infra.NServiceBus.Inbox
         {
             TurnOffAutomaticDatabaseCreationAndSchemaUpdates();
             dbSchemaName = ConfigurationManager.AppSettings["DatabaseSchemaName"];
+            dbTablePrefix = ConfigurationManager.AppSettings["EndpointTablePrefix"];
         }
 
-        public DbSet<InboxMessage> InboxRecords { get; set; }
-
-        public IInboxSettings Settings { get; private set; }
-
+        public DbSet<InboxRecord> InboxRecords { get; set; }
+       
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
           
@@ -37,7 +38,8 @@ namespace Infra.NServiceBus.Inbox
             {
                 throw new Exception("Missing schema name in app.config. Please add value for DatabaseSchemaName");
             }
-            modelBuilder.HasDefaultSchema(dbSchemaName);
+           
+            modelBuilder.Types().Configure(c => c.ToTable(dbTablePrefix + c.ClrType.Name, dbSchemaName));
             base.OnModelCreating(modelBuilder);
         }
 
@@ -46,9 +48,9 @@ namespace Infra.NServiceBus.Inbox
             Database.SetInitializer<InboxDbContext>(null);
         }
 
-        public async Task PersistHandledMessage(InboxMessage inboxMessage)
+        public async Task PersistHandledMessage(InboxRecord inboxMessage)
         {
-            const string sql = @"MERGE INTO [{0}].InboxRecord WITH (updlock, rowlock) AS tgt
+            const string sql = @"MERGE INTO [{0}].[{1}InboxRecord] WITH (updlock, rowlock) AS tgt
                         USING
                           (SELECT @ContentId, @CheckMessageOrderType) AS src (ContentId, CheckMessageOrderType)
                           ON tgt.ContentId = src.ContentId and tgt.CheckMessageOrderType = src.CheckMessageOrderType 
@@ -63,8 +65,9 @@ namespace Infra.NServiceBus.Inbox
                           INSERT (ContentId, ContentVersion, CheckMessageOrderType, ModifiedAtUtc, MessageId) 
                           VALUES (@ContentId, @ContentVersion, @CheckMessageOrderType, @ModifiedAtUtc, @MessageId);";
 
+            object[] parameters = { dbSchemaName, dbTablePrefix };
             await this.Database.ExecuteSqlCommandAsync(
-                string.Format(sql, dbSchemaName),
+                string.Format(sql, parameters),
                 new SqlParameter("@ContentId", inboxMessage.ContentId),
                 new SqlParameter("@ContentVersion", inboxMessage.ContentVersion),
                 new SqlParameter("@CheckMessageOrderType", inboxMessage.CheckMessageOrderType),
@@ -73,14 +76,15 @@ namespace Infra.NServiceBus.Inbox
                 .ConfigureAwait(false);
         }
 
-        public async Task PersistDiscardedMessage(InboxMessage inboxMessage, long latestHandledVersion)
+        public async Task PersistDiscardedMessage(InboxRecord inboxMessage, long latestHandledVersion)
         {
             //Add or update
-            const string sql = @"INSERT INTO [{0}].[InboxRecordDiscarded] (ContentId, ContentVersion, LatestContentVersion, CheckMessageOrderType, ModifiedAtUtc, MessageId)
+            const string sql = @"INSERT INTO [{0}].[{1}InboxRecordDiscarded] (ContentId, ContentVersion, LatestContentVersion, CheckMessageOrderType, ModifiedAtUtc, MessageId)
 		                        VALUES (@ContentId, @ContentVersion, @LatestContentVersion, @CheckMessageOrderType, @ModifiedAtUtc, @MessageId)";
 
+            object[] parameters = { dbSchemaName, dbTablePrefix };
             await this.Database.ExecuteSqlCommandAsync(
-                string.Format(sql, dbSchemaName),
+                  string.Format(sql, parameters),
                 new SqlParameter("@ContentId", inboxMessage.ContentId),
                 new SqlParameter("@ContentVersion", inboxMessage.ContentVersion),
                 new SqlParameter("@LatestContentVersion", latestHandledVersion),

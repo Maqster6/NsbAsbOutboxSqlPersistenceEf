@@ -20,6 +20,9 @@ namespace Endpoint2
             async void Loop(IMessageSession session)
             {
                 Console.WriteLine("Press enter to send Place Order Command");
+                int tempOrderNumber = 0;
+                string tempContentId = string.Empty;
+                string tempContentVersion = "0";
 
                 while (true)
                 {
@@ -29,26 +32,34 @@ namespace Endpoint2
                     {
                         for (int i = 0; i < 10; i++)
                         {
-
                             var orderNumber = i + 1;
-
                             Guid orderId = Guid.NewGuid();
-                            string contentVersion = DateTime.UtcNow.Ticks.ToString();
+                            string contentId = orderId.ToString();
+                            string contentVersion = DateTime.UtcNow.Ticks.ToString(); //(i + 1).ToString();
+
+                            if (i % 2 == 1) // DiscardedMessages 
+                            {
+                                orderNumber = tempOrderNumber;
+                                contentId = tempContentId;
+                                contentVersion = tempContentVersion;//"-1";
+                            }
                             var placeOrderCommand = new PlaceOrderCommand
                             {
                                 OrderId = orderId,
                                 OrderNumber = orderNumber,
                                 PlacedAtDate = DateTime.UtcNow
                             };
-
                             var sendOptions = new SendOptions();
-                            string contentId = orderId.ToString();
+
                             sendOptions.SetHeader("ContentId", contentId);
                             sendOptions.SetHeader("ContentVersion", contentVersion);
                             sendOptions.SetDestination("Endpoint2");
-
                             await session.Send(placeOrderCommand, sendOptions)
                                          .ConfigureAwait(false);
+
+                            tempOrderNumber = orderNumber;
+                            tempContentId = contentId;
+                            tempContentVersion = (long.Parse(contentVersion) - 1000).ToString();
 
                             Console.WriteLine($"Place Order Command sent {orderNumber}");
                         }
