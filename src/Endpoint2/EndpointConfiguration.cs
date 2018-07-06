@@ -4,6 +4,7 @@ using Domain;
 using Endpoint2;
 using Infra.NServiceBus;
 using Infra.NServiceBus.Inbox;
+using Infra.NServiceBus.Transport;
 using NServiceBus;
 
 
@@ -11,8 +12,9 @@ class Program
 {
     public static async Task Main()
     {
-        var endpointConfiguration = new EndpointConfiguration("Endpoint2");
-        endpointConfiguration.DefineEndpointName("Endpoint2");
+        var endpointConfiguration = new EndpointConfiguration("LoadTest");
+        var transport = endpointConfiguration.SetTransport();
+        endpointConfiguration.SetTopology(transport);
         endpointConfiguration.EnableOutbox();
         endpointConfiguration.EnableInbox();
         endpointConfiguration.EnablePersistAndPublish<OrderDbContext>();

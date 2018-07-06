@@ -11,8 +11,8 @@ namespace Infra.NServiceBus.Inbox
 {
     public class InboxDbContext : DbContext
     {
-        protected string dbSchemaName;
-        protected string dbTablePrefix;
+        private readonly string dbSchemaName;
+        private readonly string dbTablePrefix;
 
         public InboxDbContext()
         {

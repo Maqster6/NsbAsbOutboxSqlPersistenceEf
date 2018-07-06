@@ -30,7 +30,7 @@ namespace Endpoint2
 
                     if (key.Key == ConsoleKey.Enter)
                     {
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 2000; i++)
                         {
                             var orderNumber = i + 1;
                             Guid orderId = Guid.NewGuid();
@@ -53,7 +53,7 @@ namespace Endpoint2
 
                             sendOptions.SetHeader("ContentId", contentId);
                             sendOptions.SetHeader("ContentVersion", contentVersion);
-                            sendOptions.SetDestination("Endpoint2");
+                            sendOptions.SetDestination("LoadTest");
                             await session.Send(placeOrderCommand, sendOptions)
                                          .ConfigureAwait(false);
 

@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using Infra.NServiceBus.Inbox;
+using Infra.NServiceBus.Inbox.Startup;
 using Infra.NServiceBus.Persistence;
 using NServiceBus;
 
@@ -36,6 +37,7 @@ namespace Infra.NServiceBus
                     components.ConfigureComponent<InboxBehavior<InboxDbContext>>(DependencyLifecycle.InstancePerUnitOfWork);
                     components.ConfigureComponent<DbContextWrapper<InboxDbContext>>(DependencyLifecycle.SingleInstance);
                 });
+            configuration.EnableFeature<InboxStartup>();
         }
     }
 }
